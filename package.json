@@ -1,0 +1,15 @@
+{
+  "name": "agroanalytics",
+  "version": "1.0.0",
+  "description": "Sistema de Gestão Agrícola de Precisão - TCC João Pedro Araujo",
+  "scripts": {
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
+    "start": "concurrently \"cd backend && npm start\" \"cd frontend && npm start\"",
+    "setup:db": "cd backend && npm run db:setup",
+    "setup:db:seed": "cd backend && npm run db:seed"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

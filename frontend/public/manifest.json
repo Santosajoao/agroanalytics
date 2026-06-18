@@ -1,0 +1,12 @@
+{
+  "short_name": "AgroAnalytics",
+  "name": "AgroAnalytics - Gestão Agrícola de Precisão",
+  "icons": [
+    { "src": "favicon.ico", "sizes": "64x64 32x32 24x24 16x16", "type": "image/x-icon" }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#3B6D11",
+  "background_color": "#F5F6F8",
+  "orientation": "portrait-primary"
+}
