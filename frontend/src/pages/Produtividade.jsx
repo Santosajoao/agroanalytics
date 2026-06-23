@@ -77,10 +77,18 @@ export default function Produtividade() {
 
   const comAnalise = correlacoes.filter(c => c.analise).length;
   const comColheita = correlacoes.filter(c => c.ciclo).length;
+  const calcularNecessidadeCalcario = (analise, cultura, PRNT = 80) => {
+    if (!analise) return 0;
+    const V2 = cultura === 'Milho' ? 70 : 65;
+    const V1 = parseFloat(analise.saturacao_bases);
+    const CTC = parseFloat(analise.ctc);
+    if (isNaN(V1) || isNaN(CTC) || V1 >= V2) return 0;
+    return ((V2 - V1) * CTC) / PRNT;
+  };
+
   const totalCalcarioNecessario = correlacoes.reduce((s, c) => {
     if (!c.analise) return s;
-    const V2 = c.talhao.cultura_atual === 'Milho' ? 70 : 65;
-    const nc = c.analise.saturacao_bases < V2 ? ((V2 - c.analise.saturacao_bases) * c.analise.ctc) / (10 * 0.8) : 0;
+    const nc = calcularNecessidadeCalcario(c.analise, c.talhao.cultura_atual);
     return s + (nc * (c.talhao.area_ha || 0));
   }, 0);
 
@@ -143,9 +151,8 @@ export default function Produtividade() {
                         else if (prod >= mediaRef * 0.85) { avaliacao = 'Na média'; corAval = 'amarelo'; }
                         else { avaliacao = 'Abaixo da média'; corAval = 'vermelho'; }
                       }
-                      const V2 = cultura === 'Milho' ? 70 : 65;
-                      const nc = analise && analise.saturacao_bases < V2
-                        ? Math.round(((V2 - analise.saturacao_bases) * analise.ctc / 8) * 100) / 100 : 0;
+                      const nc = calcularNecessidadeCalcario(analise, cultura);
+                      const ncRound = Math.round(nc * 100) / 100;
                       return (
                         <tr key={talhao.id}>
                           <td style={{ fontWeight: 500 }}>{talhao.nome}</td>
