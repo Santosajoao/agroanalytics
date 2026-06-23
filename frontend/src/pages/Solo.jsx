@@ -466,6 +466,10 @@ export default function Solo() {
                   }}
                 >
                   NC = (V₂ - V₁) × CTC / PRNT
+                  {/* VOU FAZER UMA LEGENDA PARA A FÓRMULA */}
+                  <div style={{fontSize: 10,color: "var(--texto-sub)"}}>
+                    Onde: NC = necessidade de calcário (t/ha) · V₂ = saturação de bases desejada (%) · V₁ = saturação de bases atual (%) · CTC = capacidade de troca catiônica (cmolc/dm³) · PRNT = poder relativo de neutralização total (%)
+                  </div>
                 </div>
 
                 <div className="form-grid-2" style={{ marginBottom: 14 }}>
