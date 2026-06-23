@@ -16,19 +16,33 @@ function calcularCalagem(analise, cultura, PRNT = 80) {
     'Soja': 65, 'Milho': 70, 'Trigo': 65, 'Café': 60,
     'Cana': 60, 'Arroz': 55, 'Feijão': 65,
   };
+
   const V2 = V2_cultura[cultura] || 65;
-  const V1 = analise.saturacao_bases;
-  const CTC = analise.ctc;
-  if (!V1 || !CTC) return null;
-  if (V1 >= V2) return { necessidade_calcario: 0, V2, V1, CTC, PRNT, status: 'adequado' };
-  const nc = ((V2 - V1) * CTC) / (10 * (PRNT / 100));
+  const V1 = parseFloat(analise.saturacao_bases);
+  const CTC = parseFloat(analise.ctc);
+
+  // Evita erros caso os dados da análise venham vazios ou zerados
+  if (isNaN(V1) || isNaN(CTC)) return null;
+
+  // Se o solo já tem mais bases do que o necessário, não precisa calcário
+  if (V1 >= V2) {
+    return { necessidade_calcario: 0, V2, V1, CTC, PRNT, status: 'adequado' };
+  }
+
+  // FÓRMULA CORRIGIDA: ((V2 - V1) * CTC) / PRNT
+  const nc = ((V2 - V1) * CTC) / PRNT;
   const ncRound = Math.round(nc * 100) / 100;
+
   return {
     necessidade_calcario: ncRound,
-    V2, V1: parseFloat(V1), CTC: parseFloat(CTC), PRNT,
+    V2, 
+    V1, 
+    CTC, 
+    PRNT,
     status: ncRound > 3 ? 'critico' : ncRound > 1.5 ? 'alto' : ncRound > 0 ? 'moderado' : 'adequado',
   };
 }
+
 
 exports.listar = async (req, res) => {
   try {
