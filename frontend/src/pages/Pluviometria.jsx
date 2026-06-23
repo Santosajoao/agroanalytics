@@ -91,10 +91,19 @@ export default function Pluviometria() {
 
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
 
+  // Formatar data para mostrar apenas dia/mês
+  const formatarDataGrafico = (dataStr) => {
+    if (!dataStr) return '';
+    // Se contiver 'T', extrai apenas a parte da data (YYYY-MM-DD)
+    const dataParte = dataStr.includes('T') ? dataStr.split('T')[0] : dataStr;
+    const [ano, mes, dia] = dataParte.split('-');
+    return `${dia}/${mes}`;
+  };
+
   // Dados acumulados para gráfico de linha
   const dadosAcumulado = dados.registros.reduce((acc, r, i) => {
     const prev = i > 0 ? acc[i - 1].acumulado : 0;
-    acc.push({ data: r.data_registro?.slice(5), mm: parseFloat(r.precipitacao_mm), acumulado: parseFloat((prev + parseFloat(r.precipitacao_mm)).toFixed(1)) });
+    acc.push({ data: formatarDataGrafico(r.data_registro), mm: parseFloat(r.precipitacao_mm), acumulado: parseFloat((prev + parseFloat(r.precipitacao_mm)).toFixed(1)) });
     return acc;
   }, []);
 
